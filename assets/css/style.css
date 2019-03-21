@@ -1,0 +1,13 @@
+body {
+    background-image: url(../images/train-background.jpg);
+}
+
+#train-table, #departures, .jumbotron, form{
+    background-color: black;
+    color: white;
+    font-family: 'Inconsolata', monospace;
+}
+
+.card {
+    background-color: transparent;
+}
