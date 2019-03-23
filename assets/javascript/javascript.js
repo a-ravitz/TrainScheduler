@@ -38,15 +38,30 @@ $("#add-train-btn").on("click", function(event) {
     $("#frequency-input").empty();
 
 });
+$(document).on("click", ".remove", function() {
+    var tr = $(this).closest("tr");
+    var key = tr.attr("data-key")
+    console.log(key);
+
+    database.ref(key).remove();
+    tr.remove(); 
+    console.log("deleted!");
+});
 
 database.ref().on("child_added", function(Snapshot) {
-    console.log(Snapshot.val());
+    console.log(Snapshot.key);
   
     // Store everything into a variable.
     var tName = Snapshot.val().train;
     var tDestination = Snapshot.val().destination;
     var firstTime = Snapshot.val().firstTime;
     var frequency = Snapshot.val().frequency;
+    var clearBtn = $("<button>").addClass("remove btn btn-primary").text("Clear");
+
+        // $(".remove").on("click", function() {
+        //     $(this).closest("tr").remove(); 
+        //     console.log("deleted!");
+        // });
 
     //converting the first time 
     var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
@@ -72,12 +87,13 @@ database.ref().on("child_added", function(Snapshot) {
     var nextTrain = moment().add(minutesTill, "minutes");
     console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
-    var newInfo = $("<tr>").append(
+    var newInfo = $("<tr>").attr("data-key", Snapshot.key).append(
         $("<td>").text(tName),
         $("<td>").text(tDestination),
         $("<td>").text(frequency),
         $("<td>").text(nextTrain),
-        $("<td>").text(minutesTill)
+        $("<td>").text(minutesTill),
+        $("<td>").html(clearBtn)
       );
 
       $("#train-table > tbody").append(newInfo);
