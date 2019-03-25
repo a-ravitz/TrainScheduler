@@ -123,16 +123,17 @@ function childAdded() {
 
         $("#train-table > tbody").append(newInfo);
         update()
-        
-        
-        
+         
     });
+
 };childAdded()
 
 function update() {
     upToTheMinute = setInterval(childAdded, 60000);
+
 };
 
+//curent time updated every second 
 function time () {
     var currentTime = moment();
     $("#currentTime").text("The current time is " + moment(currentTime).format("hh:mm:ss"))
