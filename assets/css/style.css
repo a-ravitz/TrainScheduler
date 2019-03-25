@@ -11,3 +11,8 @@ body {
 .card {
     background-color: transparent;
 }
+
+span {
+    color: white;
+    font-size: 13px;
+}

@@ -12,7 +12,8 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 
-var upToTheMiute;
+var upToTheMinute;
+var upToTheSecond;
 
 //add a train to the table at the top 
 $("#add-train-btn").on("click", function (event) {
@@ -85,7 +86,6 @@ function childAdded() {
     $("#train-table > tbody").empty();
 
     database.ref().on("child_added", function (Snapshot) {
-        console.log(Snapshot.key);
 
         // Store everything into a variable.
         var tName = Snapshot.val().train;
@@ -97,33 +97,26 @@ function childAdded() {
 
         //converting the first time 
         var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-        console.log(firstTimeConverted);
 
         //collecting the current time 
         var currentTime = moment();
-        console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
 
         //getting the difference between the current time and the first time
         var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-        console.log("DIFFERENCE IN TIME: " + diffTime);
 
         // Time apart (remainder)
         var tRemainder = diffTime % frequency;
-        console.log(tRemainder);
 
         // Minute Until Train
         var minutesTill = frequency - tRemainder;
-        console.log("MINUTES TILL TRAIN: " + minutesTill);
-
         // Next Train
         var nextTrain = moment().add(minutesTill, "minutes");
-        console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
         var newInfo = $("<tr>").attr("data-key", Snapshot.key).append(
             $("<td>").text(tName),
             $("<td>").text(tDestination),
             $("<td>").text(frequency),
-            $("<td>").text(nextTrain),
+            $("<td>").text(moment(nextTrain).format("hh:mm")),
             $("<td>").text(minutesTill),
             $("<td>").html(clearBtn),
             $("<td>").html(updateBtn)
@@ -131,12 +124,15 @@ function childAdded() {
 
         $("#train-table > tbody").append(newInfo);
         update()
+
+        $("#currentTime").text("The current time is " + moment(currentTime).format("hh:mm:ss"))
+        
+        
     });
 };
 
 function update() {
-    
-    upToTheMiute = setInterval(childAdded, 60000);
+    upToTheMinute = setInterval(childAdded, 1000);
 };
 
 
