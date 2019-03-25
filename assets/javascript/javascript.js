@@ -12,6 +12,7 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 var upToTheMinute;
+var upToTheSecond
 
 //add a train to the table at the top 
 $("#add-train-btn").on("click", function (event) {
@@ -122,16 +123,20 @@ function childAdded() {
 
         $("#train-table > tbody").append(newInfo);
         update()
-
-        $("#currentTime").text("The current time is " + moment(currentTime).format("hh:mm"))
+        
         
         
     });
-};
+};childAdded()
 
 function update() {
     upToTheMinute = setInterval(childAdded, 60000);
 };
 
+function time () {
+    var currentTime = moment();
+    $("#currentTime").text("The current time is " + moment(currentTime).format("hh:mm:ss"))
+} time();
 
-childAdded()
+upToTheSecond = setInterval(time, 1000)
+
